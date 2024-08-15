@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+// Maze component definition
 function Maze({ level, onLevelComplete }) {
   const [ballPosition, setBallPosition] = useState(level.start); // Ball initial position
   const [trail, setTrail] = useState([]); // Trail positions
@@ -42,25 +43,47 @@ function Maze({ level, onLevelComplete }) {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress); // Listen for key presses
 
-    return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on unmount
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]); // Dependency array ensures the function reference remains stable
 
   return (
-    <div className="grid" style={{ gridTemplateColumns: `repeat(${level.gridSize}, 30px)`, gridTemplateRows: `repeat(${level.gridSize}, 30px)` }}>
-      {Array.from({ length: level.gridSize }).map((_, row) =>
-        Array.from({ length: level.gridSize }).map((_, col) => {
-          const isBall = ballPosition.x === col && ballPosition.y === row;
-          const isTrail = trail.some(position => position.x === col && position.y === row);
-          const isEnd = level.end.x === col && level.end.y === row; // Check if the cell is the end position
-          const isObstacle = level.obstacles.some(obstacle => obstacle.x === col && obstacle.y === row); // Check if the cell is an obstacle
-          return (
-            <div
-              key={`${row}-${col}`}
-              className={`cell ${isBall ? 'ball' : isTrail ? 'trail' : isEnd ? 'end' : isObstacle ? 'obstacle' : ''}`}
-            />
-          );
-        })
-      )}
+    // Outer container for centering the maze on the page
+    <div className="maze-container">
+      {/* Grid container for the maze layout */}
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${level.gridSize}, 30px)`, // Dynamically set column count
+          gridTemplateRows: `repeat(${level.gridSize}, 30px)` // Dynamically set row count
+        }}
+      >
+        {/* Generate the grid cells based on level configuration */}
+        {Array.from({ length: level.gridSize }).map((_, row) =>
+          Array.from({ length: level.gridSize }).map((_, col) => {
+            const isBall = ballPosition.x === col && ballPosition.y === row; // Check if the ball is in this cell
+            const isTrail = trail.some(position => position.x === col && position.y === row); // Check if this cell is part of the trail
+            const isEnd = level.end.x === col && level.end.y === row; // Check if the cell is the end position
+            const isObstacle = level.obstacles.some(obstacle => obstacle.x === col && obstacle.y === row); // Check if the cell is an obstacle
+            return (
+              <div
+                key={`${row}-${col}`}
+                className={`cell ${
+                  isBall
+                    ? 'ball'
+                    : isTrail
+                    ? 'trail'
+                    : isEnd
+                    ? 'end'
+                    : isObstacle
+                    ? 'obstacle'
+                    : ''
+                }`} // Apply appropriate class based on cell type
+              />
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }

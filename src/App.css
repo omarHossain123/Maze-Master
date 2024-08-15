@@ -10,6 +10,9 @@
 .grid {
   display: grid; /* Creates a grid layout */
   gap: 2px; /* Space between cells */
+  justify-content: center; /* Center grid horizontally */
+  align-items: center; /* Center grid vertically */
+  margin: auto; /* Ensure grid is centered */
 }
 
 /* Style for each cell in the maze */
@@ -133,11 +136,3 @@ body {
   text-align: center; /* Center the text */
 }
 
-/* Center the grid */
-.grid {
-  display: grid; /* Creates a grid layout */
-  gap: 2px; /* Space between cells */
-  justify-content: center; /* Center grid horizontally */
-  align-items: center; /* Center grid vertically */
-  margin: auto; /* Ensure grid is centered */
-}
