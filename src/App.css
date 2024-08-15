@@ -54,6 +54,20 @@ body {
   color: #333; /* Dark gray text for readability */
 }
 
+/* Container for centering the level selection screen */
+.level-selection {
+  display: flex; /* Aligns children horizontally */
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center elements horizontally */
+  justify-content: center; /* Center elements vertically */
+  height: 100vh; /* Full viewport height */
+  text-align: center; /* Center the text */
+}
+
+.level-selection h1 {
+  margin-bottom: 20px; /* Space between title and buttons */
+}
+
 /* Button styles */
 .btn {
   padding: 12px 24px; /* Comfortable padding for buttons */

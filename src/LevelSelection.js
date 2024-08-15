@@ -1,12 +1,14 @@
-import React from 'react'; 
+import React from 'react';
+import './App.css';
 
 // LevelSelection component definition
 function LevelSelection({ onLevelSelect }) {
-  // Generate level buttons based on the number of levels
   return (
+    // Container for centering the level selection screen
     <div className="level-selection">
       <h1>Select a Level</h1>
-      {Array.from({ length: 7 }).map((_, index) => ( // 7 levels
+      {/* Generate level buttons based on the number of levels */}
+      {Array.from({ length: 7 }).map((_, index) => (
         <button
           key={index}
           className="btn"
@@ -19,4 +21,4 @@ function LevelSelection({ onLevelSelect }) {
   );
 }
 
-export default LevelSelection; 
+export default LevelSelection;
