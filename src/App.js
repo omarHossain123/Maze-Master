@@ -2,7 +2,8 @@
 // level transitions.
 
 import React, { useState } from 'react'; 
-import './App.css'; 
+import './App.css';
+import './index.css'; 
 import { levels } from './levels'; 
 import Maze from './Maze'; 
 import WelcomeScreen from './WelcomeScreen'; 

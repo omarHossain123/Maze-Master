@@ -1,10 +1,15 @@
-// This file handles the rendering of the maze and user interactions.
-import React, { useState, useEffect } from 'react'; 
-import './App.css'; 
+import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function Maze({ level, onLevelComplete }) {
   const [ballPosition, setBallPosition] = useState(level.start); // Ball initial position
   const [trail, setTrail] = useState([]); // Trail positions
+
+  // Reset ball position and trail when the level changes
+  useEffect(() => {
+    setBallPosition(level.start); // Reset ball to the start position
+    setTrail([]); // Clear the trail
+  }, [level]); // Re-run the effect only when the level changes
 
   // Handle key press events to move the ball
   const handleKeyPress = (event) => {
@@ -33,10 +38,12 @@ function Maze({ level, onLevelComplete }) {
     }
   };
 
+  // Add keydown event listener for the first render
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress); // Add keydown event listener
-    return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup on component unmount
-  }, [ballPosition, trail, level]); // Re-run effect when dependencies change
+    window.addEventListener('keydown', handleKeyPress); // Listen for key presses
+
+    return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on unmount
+  }, [handleKeyPress]); // Dependency array ensures the function reference remains stable
 
   return (
     <div className="grid" style={{ gridTemplateColumns: `repeat(${level.gridSize}, 30px)`, gridTemplateRows: `repeat(${level.gridSize}, 30px)` }}>
@@ -45,10 +52,11 @@ function Maze({ level, onLevelComplete }) {
           const isBall = ballPosition.x === col && ballPosition.y === row;
           const isTrail = trail.some(position => position.x === col && position.y === row);
           const isEnd = level.end.x === col && level.end.y === row; // Check if the cell is the end position
+          const isObstacle = level.obstacles.some(obstacle => obstacle.x === col && obstacle.y === row); // Check if the cell is an obstacle
           return (
             <div
               key={`${row}-${col}`}
-              className={`cell ${isBall ? 'ball' : isTrail ? 'trail' : isEnd ? 'end' : ''}`}
+              className={`cell ${isBall ? 'ball' : isTrail ? 'trail' : isEnd ? 'end' : isObstacle ? 'obstacle' : ''}`}
             />
           );
         })
@@ -57,6 +65,4 @@ function Maze({ level, onLevelComplete }) {
   );
 }
 
-export default Maze; // Export the Maze component
-
-
+export default Maze;

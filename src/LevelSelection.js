@@ -1,14 +1,22 @@
-import React from "react";
+import React from 'react'; 
 
+// LevelSelection component definition
 function LevelSelection({ onLevelSelect }) {
-    return (
-      <div className="level-selection">
-        <h1>Select a Level</h1> {/* Title for level selection */}
-        <button className="btn" onClick={() => onLevelSelect(0)}>Level 1</button> 
-        <button className="btn" onClick={() => onLevelSelect(1)}>Level 2</button> 
-        {/* Add more level buttons as needed */}
-      </div>
-    );
-  }
-  
-  export default LevelSelection;
+  // Generate level buttons based on the number of levels
+  return (
+    <div className="level-selection">
+      <h1>Select a Level</h1>
+      {Array.from({ length: 7 }).map((_, index) => ( // 7 levels
+        <button
+          key={index}
+          className="btn"
+          onClick={() => onLevelSelect(index)} // Pass the level index
+        >
+          Level {index + 1}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default LevelSelection; 
