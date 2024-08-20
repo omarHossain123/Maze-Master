@@ -1,20 +1,18 @@
-import React from 'react';
-import './App.css';
-
-// LevelSelection component definition
-function LevelSelection({ onLevelSelect }) {
+// The component takes in onLevelSelect and levels as props
+function LevelSelection({ onLevelSelect, levels }) { 
   return (
     // Container for centering the level selection screen
     <div className="level-selection">
       <h1>Select a Level</h1>
-      {/* Generate level buttons based on the number of levels */}
-      {Array.from({ length: 7 }).map((_, index) => (
+      {/* Generate level buttons based on the levels array */}
+      {levels.map((level, index) => (
         <button
-          key={index}
+          key={index} // Unique key for each button
           className="btn"
-          onClick={() => onLevelSelect(index)} // Pass the level index
+          onClick={() => onLevelSelect(index)} // Trigger onLevelSelect with the index of the level
+          disabled={level.locked} // Disable the button if the level is locked
         >
-          Level {index + 1}
+          {level.locked ? `Level ${index + 1} (Locked)` : `Level ${index + 1}`} {/* Display locked status */}
         </button>
       ))}
     </div>

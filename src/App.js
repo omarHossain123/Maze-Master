@@ -1,63 +1,81 @@
-// This file imports the levels configuration and the Maze component, handle the current level, and manages 
-// level transitions.
-
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import './App.css';
-import './index.css'; 
-import { levels } from './levels'; 
-import Maze from './Maze'; 
+import './index.css';
+import { levels as initialLevels } from './levels'; 
+import Maze from './Maze';
 import WelcomeScreen from './WelcomeScreen'; 
 import LevelSelection from './LevelSelection'; 
 import HowToPlay from './HowToPlay'; 
 
 function App() {
-  const [currentLevel, setCurrentLevel] = useState(null); // State to track the current level
-  const [showWelcome, setShowWelcome] = useState(true); // State to show welcome screen
-  const [showHowToPlay, setShowHowToPlay] = useState(false); // State to show how-to-play pop-up
+  // State to manage the current level the user is on
+  const [currentLevel, setCurrentLevel] = useState(null);
+
+  // State to manage the visibility of the welcome screen
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // State to manage the visibility of the "How to Play" pop-up
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
+
+  // State to keep track of the levels and their locked/unlocked status
+  const [levels, setLevels] = useState(initialLevels);
 
   // Function to start the game and show level selection
   const startGame = () => {
-    setShowWelcome(false); // Hide welcome screen
+    setShowWelcome(false); // Hide the welcome screen
   };
 
-  // Function to show the how-to-play pop-up
+  // Function to show the "How to Play" pop-up
   const showInstructions = () => {
-    setShowHowToPlay(true); // Show pop-up
+    setShowHowToPlay(true); // Display the "How to Play" pop-up
   };
 
-  // Function to close the how-to-play pop-up
+  // Function to close the "How to Play" pop-up
   const closeInstructions = () => {
-    setShowHowToPlay(false); // Hide pop-up
+    setShowHowToPlay(false); // Hide the "How to Play" pop-up
   };
 
-  // Function to handle level selection
+  // Function to handle the selection of a level
   const handleLevelSelect = (levelIndex) => {
-    setCurrentLevel(levelIndex); // Set the current level
+    setCurrentLevel(levelIndex); // Set the current level based on the user's selection
   };
 
-  // Function to handle level completion
+  // Function to handle what happens when a level is completed
   const handleLevelComplete = () => {
-    if (currentLevel < levels.length - 1) {
-      alert('Level Complete! Moving to the next level.'); // Notify the user
+    if (currentLevel < levels.length - 1) { // Check if there are more levels after the current one
+      alert('Level Complete! Moving to the next level.'); // Notify the user of level completion
       setCurrentLevel(currentLevel + 1); // Move to the next level
+
+      // Unlock the next level in the array
+      const updatedLevels = [...levels];
+      updatedLevels[currentLevel + 1].locked = false; // Unlock the next level
+      setLevels(updatedLevels); // Update the levels state with the new unlocked status
+
     } else {
-      alert('Congratulations! You have completed all levels!'); // Notify the user of completion
-      setShowWelcome(true); // Show welcome screen again
-      setCurrentLevel(null); // Reset current level
+      // If the user has completed all levels
+      alert('Congratulations! You have completed all levels!'); // Notify the user
+      setShowWelcome(true); // Show the welcome screen again
+      setCurrentLevel(null); // Reset the current level to null
     }
   };
 
   return (
     <div className="App">
-      {showWelcome && <WelcomeScreen onPlay={startGame} onHowToPlay={showInstructions} />} {/* Show WelcomeScreen */}
-      {currentLevel === null && !showWelcome && <LevelSelection onLevelSelect={handleLevelSelect} />} {/* Show LevelSelection */}
-      {showHowToPlay && <HowToPlay onClose={closeInstructions} />} {/* Show HowToPlay pop-up */}
-      {currentLevel !== null && !showWelcome && !showHowToPlay && <Maze level={levels[currentLevel]} onLevelComplete={handleLevelComplete} />} {/* Show Maze */}
+      {/* Show the welcome screen if `showWelcome` is true */}
+      {showWelcome && <WelcomeScreen onPlay={startGame} onHowToPlay={showInstructions} />}
+
+      {/* Show the level selection screen if no level is selected and the welcome screen is not visible */}
+      {currentLevel === null && !showWelcome && <LevelSelection onLevelSelect={handleLevelSelect} levels={levels} />}
+
+      {/* Show the "How to Play" pop-up if `showHowToPlay` is true */}
+      {showHowToPlay && <HowToPlay onClose={closeInstructions} />}
+
+      {/* Show the maze for the selected level if a level is selected, and the welcome and how-to-play screens are not visible */}
+      {currentLevel !== null && !showWelcome && !showHowToPlay && (
+        <Maze level={levels[currentLevel]} onLevelComplete={handleLevelComplete} />
+      )}
     </div>
   );
 }
 
-export default App; // Export the App component
-
-
-
+export default App;
