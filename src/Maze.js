@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './App.css'; // Import the global styles
 
 function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
   const [ballPosition, setBallPosition] = useState(level.start); // Track the current position of the ball
@@ -10,12 +10,12 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
   const [showObstacleHitPopup, setShowObstacleHitPopup] = useState(false); // Control visibility of the obstacle hit pop-up
   const [showEndOfLevelUI, setShowEndOfLevelUI] = useState(false); // Control visibility of the end-of-level UI
 
-  // Effect to reset the state when the level changes
+  // Reset the state when the level changes
   useEffect(() => {
     setBallPosition(level.start); // Reset ball to the start position
     setTrail([]); // Clear the trail
     setMovingObstacles(level.movingObstacles || []); // Reset moving obstacles
-  }, [level]); // Run the effect whenever the level changes
+  }, [level]);
 
   /**
    * Function to detect collision between the ball and any obstacles.
@@ -200,19 +200,19 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
       {/* Obstacle Hit Pop-up */}
       {showObstacleHitPopup && (
         <div className="popup obstacle-hit-popup">
-          <h2>Obstacle hit :(</h2>
-          <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart level */}
-          <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Go to Main Menu */}
+          <h2>Oops! You hit an obstacle.</h2>
+          <button className="btn" onClick={handleRestart}>Try Again</button>
+          <button className="btn" onClick={onMainMenu}>Main Menu</button>
         </div>
       )}
 
       {/* End-of-Level UI */}
       {showEndOfLevelUI && (
         <div className="popup end-of-level-popup">
-          <h2>Level Complete!</h2>
-          <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart current level */}
-          <button className="btn" onClick={handleNextLevel}>Next Level</button> {/* Proceed to next level */}
-          <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Go to Main Menu */}
+          <h2>Great Job! You completed the level.</h2>
+          <button className="btn" onClick={handleRestart}>Restart</button>
+          <button className="btn" onClick={handleNextLevel}>Next Level</button>
+          <button className="btn" onClick={onMainMenu}>Main Menu</button>
         </div>
       )}
     </div>
