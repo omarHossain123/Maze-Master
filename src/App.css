@@ -150,3 +150,65 @@ body {
   text-align: center; /* Center the text */
 }
 
+.power-up {
+  background-color: #ff69b4; /* Bright pink for visibility */
+  border-radius: 50%; /* Make the power-up circular */
+}
+
+/* General popup styling */
+.popup {
+  position: fixed;
+  bottom: 20px; /* Fixed at the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for center alignment */
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  text-align: center;
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Specific popup for speed boost */
+.speed-boost-popup {
+  bottom: 50px; /* Slightly higher to avoid overlap */
+}
+
+/* Specific popup for obstacle hit */
+.obstacle-hit-popup {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the pop-up */
+  background-color: white; /* White background */
+  color: #333; /* Dark text */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Shadow for emphasis */
+}
+
+/* Specific popup for end-of-level UI */
+.end-of-level-popup {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the pop-up */
+  background-color: white; /* White background */
+  color: #333; /* Dark text */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Shadow for emphasis */
+}
+
+/* Styling for buttons inside pop-ups */
+.popup .btn {
+  margin-top: 10px; /* Space between buttons and content */
+  padding: 8px 16px; /* Button padding */
+  background-color: #007bff; /* Bright blue */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s; /* Smooth transitions */
+}
+
+/* Button hover effect */
+.popup .btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+

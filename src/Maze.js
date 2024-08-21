@@ -1,73 +1,174 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// Maze component definition
-function Maze({ level, onLevelComplete }) {
-  const [ballPosition, setBallPosition] = useState(level.start); // Ball initial position
-  const [trail, setTrail] = useState([]); // Trail positions
+function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
+  const [ballPosition, setBallPosition] = useState(level.start); // Track the current position of the ball
+  const [trail, setTrail] = useState([]); // Track the trail left by the ball
+  const [movingObstacles, setMovingObstacles] = useState(level.movingObstacles || []); // Track the positions of moving obstacles
+  const [speed, setSpeed] = useState(1); // Manage the speed of the ball
+  const [showSpeedBoostPopup, setShowSpeedBoostPopup] = useState(false); // Control visibility of the speed boost pop-up
+  const [showObstacleHitPopup, setShowObstacleHitPopup] = useState(false); // Control visibility of the obstacle hit pop-up
+  const [showEndOfLevelUI, setShowEndOfLevelUI] = useState(false); // Control visibility of the end-of-level UI
 
-  // Reset ball position and trail when the level changes
+  // Effect to reset the state when the level changes
   useEffect(() => {
     setBallPosition(level.start); // Reset ball to the start position
     setTrail([]); // Clear the trail
-  }, [level]); // Re-run the effect only when the level changes
+    setMovingObstacles(level.movingObstacles || []); // Reset moving obstacles
+  }, [level]); // Run the effect whenever the level changes
 
-  // Handle key press events to move the ball
-  const handleKeyPress = (event) => {
-    let newPosition = { ...ballPosition }; // Copy current position
+  /**
+   * Function to detect collision between the ball and any obstacles.
+   * Checks both static and moving obstacles.
+   */
+  const detectCollision = (position) => {
+    const collisionWithObstacle = (level.obstacles || []).some(obstacle => obstacle.x === position.x && obstacle.y === position.y) ||
+                                  movingObstacles.some(obstacle => obstacle.x === position.x && obstacle.y === position.y);
 
-    // Update position based on key press
-    if (event.key === 'ArrowUp' && ballPosition.y > 0) newPosition.y -= 1;
-    else if (event.key === 'ArrowDown' && ballPosition.y < level.gridSize - 1) newPosition.y += 1;
-    else if (event.key === 'ArrowLeft' && ballPosition.x > 0) newPosition.x -= 1;
-    else if (event.key === 'ArrowRight' && ballPosition.x < level.gridSize - 1) newPosition.x += 1;
-
-    // Check if the new position is part of the trail (i.e., backtracking)
-    const trailIndex = trail.findIndex(position => position.x === newPosition.x && position.y === newPosition.y);
-
-    if (trailIndex !== -1) {
-      setTrail(trail.slice(0, trailIndex)); // Remove the tail of the trail if backtracking
-    } else {
-      setTrail([...trail, ballPosition]); // Add current position to trail
+    if (collisionWithObstacle) {
+      setShowObstacleHitPopup(true); // Show "Obstacle hit" pop-up if a collision is detected
+      return true;
     }
+    return false;
+  };
 
-    setBallPosition(newPosition); // Update ball position
+  /**
+   * Function to move the obstacles at regular intervals.
+   * Includes collision detection between moving obstacles and the player's current position.
+   */
+  const moveObstacles = () => {
+    const updatedObstacles = movingObstacles.map(obstacle => {
+      let newPosition = { ...obstacle };
 
-    // Check if the player has reached the end position
-    if (newPosition.x === level.end.x && newPosition.y === level.end.y) {
-      onLevelComplete(); // Notify the parent component that the level is complete
+      // Simple movement logic: Move horizontally first, then vertically
+      if (newPosition.x < level.gridSize - 1) {
+        newPosition.x += 1;
+      } else if (newPosition.y < level.gridSize - 1) {
+        newPosition.x = 0; // Reset x position
+        newPosition.y += 1;
+      } else {
+        newPosition.x = 0;
+        newPosition.y = 0; // Reset both x and y to start the loop again
+      }
+
+      return newPosition;
+    });
+
+    setMovingObstacles(updatedObstacles); // Update moving obstacles' positions
+
+    // Check for collisions after moving obstacles
+    if (detectCollision(ballPosition)) {
+      return; // Stop further execution if collision is detected
     }
   };
 
-  // Add keydown event listener for the first render
+  // Effect to move obstacles periodically
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress); // Listen for key presses
+    const interval = setInterval(moveObstacles, 1000); // Move obstacles every second
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, [movingObstacles]);
 
-    // Cleanup event listener on unmount
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleKeyPress]); // Dependency array ensures the function reference remains stable
+  /**
+   * Function to handle key press events for moving the ball.
+   * Implements boundary-aware movement and speed boost logic.
+   */
+  const handleKeyPress = (event) => {
+    let newPosition = { ...ballPosition };
+
+    // Determine the movement direction and apply speed boost logic
+    if (event.key === 'ArrowUp') {
+      newPosition.y = Math.max(0, ballPosition.y - speed); // Move up, ensuring the ball doesn't go out of bounds
+    } else if (event.key === 'ArrowDown') {
+      newPosition.y = Math.min(level.gridSize - 1, ballPosition.y + speed); // Move down, ensuring the ball doesn't go out of bounds
+    } else if (event.key === 'ArrowLeft') {
+      newPosition.x = Math.max(0, ballPosition.x - speed); // Move left, ensuring the ball doesn't go out of bounds
+    } else if (event.key === 'ArrowRight') {
+      newPosition.x = Math.min(level.gridSize - 1, ballPosition.x + speed); // Move right, ensuring the ball doesn't go out of bounds
+    }
+
+    // Handle trail logic (prevent backtracking)
+    const trailIndex = trail.findIndex(position => position.x === newPosition.x && position.y === newPosition.y);
+    if (trailIndex !== -1) {
+      setTrail(trail.slice(0, trailIndex)); // Remove part of the trail if backtracking
+    } else {
+      setTrail([...trail, ballPosition]); // Extend the trail
+    }
+
+    setBallPosition(newPosition); // Update the ball's position
+
+    // Check for collisions immediately after movement
+    if (detectCollision(newPosition)) {
+      return; // Stop further execution if collision is detected
+    }
+
+    // Check if the player collected a power-up
+    const powerUpIndex = (level.powerUps || []).findIndex(p => p.x === newPosition.x && p.y === newPosition.y);
+    if (powerUpIndex !== -1) {
+      const powerUp = level.powerUps[powerUpIndex];
+      if (powerUp.type === 'speed') {
+        setShowSpeedBoostPopup(true); // Show speed boost pop-up
+        setSpeed(2); // Double the speed of the ball
+        setTimeout(() => setSpeed(1), 5000); // Reset speed after 5 seconds
+        setTimeout(() => setShowSpeedBoostPopup(false), 5000); // Hide pop-up after 5 seconds
+      }
+    }
+
+    // Check if the player has reached the end position
+    if (newPosition.x === level.end.x && newPosition.y === level.end.y) {
+      setShowEndOfLevelUI(true); // Show end-of-level UI
+    }
+  };
+
+  // Effect to listen for key presses and attach the keydown event listener
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on component unmount
+  }, [handleKeyPress]);
+
+  /**
+   * Function to handle level restart.
+   * Resets the ball position, trail, and speed, and hides any active pop-ups.
+   */
+  const handleRestart = () => {
+    setBallPosition(level.start); // Reset ball to start position
+    setTrail([]); // Clear the trail
+    setSpeed(1); // Reset speed to normal
+    setShowEndOfLevelUI(false); // Hide end-of-level UI
+    setShowObstacleHitPopup(false); // Hide obstacle hit pop-up
+  };
+
+  /**
+   * Function to handle proceeding to the next level.
+   * Hides the end-of-level UI and triggers the parent function to move to the next level.
+   */
+  const handleNextLevel = () => {
+    setShowEndOfLevelUI(false); // Hide end-of-level UI
+    onLevelComplete(); // Trigger the parent function to move to the next level
+  };
 
   return (
-    // Outer container for centering the maze on the page
     <div className="maze-container">
       {/* Grid container for the maze layout */}
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `repeat(${level.gridSize}, 30px)`, // Dynamically set column count
-          gridTemplateRows: `repeat(${level.gridSize}, 30px)` // Dynamically set row count
+          gridTemplateColumns: `repeat(${level.gridSize}, 30px)`, // Dynamically set number of columns based on grid size
+          gridTemplateRows: `repeat(${level.gridSize}, 30px)` // Dynamically set number of rows based on grid size
         }}
       >
-        {/* Generate the grid cells based on level configuration */}
+        {/* Generate the grid cells based on the level configuration */}
         {Array.from({ length: level.gridSize }).map((_, row) =>
           Array.from({ length: level.gridSize }).map((_, col) => {
-            const isBall = ballPosition.x === col && ballPosition.y === row; // Check if the ball is in this cell
-            const isTrail = trail.some(position => position.x === col && position.y === row); // Check if this cell is part of the trail
-            const isEnd = level.end.x === col && level.end.y === row; // Check if the cell is the end position
-            const isObstacle = level.obstacles.some(obstacle => obstacle.x === col && obstacle.y === row); // Check if the cell is an obstacle
+            const isBall = ballPosition.x === col && ballPosition.y === row;
+            const isTrail = trail.some(position => position.x === col && position.y === row);
+            const isEnd = level.end.x === col && level.end.y === row;
+            const isObstacle = (level.obstacles || []).some(obstacle => obstacle.x === col && obstacle.y === row);
+            const isMovingObstacle = movingObstacles.some(obstacle => obstacle.x === col && obstacle.y === row);
+            const isPowerUp = (level.powerUps || []).some(powerUp => powerUp.x === col && powerUp.y === row);
+
             return (
               <div
-                key={`${row}-${col}`}
+                key={`${row}-${col}`} // Unique key for each cell
                 className={`cell ${
                   isBall
                     ? 'ball'
@@ -75,15 +176,45 @@ function Maze({ level, onLevelComplete }) {
                     ? 'trail'
                     : isEnd
                     ? 'end'
+                    : isPowerUp
+                    ? 'power-up'
+                    : isMovingObstacle
+                    ? 'obstacle'
                     : isObstacle
                     ? 'obstacle'
                     : ''
-                }`} // Apply appropriate class based on cell type
+                }`} // Apply appropriate class based on the cell type
               />
             );
           })
         )}
       </div>
+
+      {/* Speed Boost Pop-up */}
+      {showSpeedBoostPopup && (
+        <div className="popup speed-boost-popup">
+          Speed Boost Activated!
+        </div>
+      )}
+
+      {/* Obstacle Hit Pop-up */}
+      {showObstacleHitPopup && (
+        <div className="popup obstacle-hit-popup">
+          <h2>Obstacle hit :(</h2>
+          <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart level */}
+          <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Go to Main Menu */}
+        </div>
+      )}
+
+      {/* End-of-Level UI */}
+      {showEndOfLevelUI && (
+        <div className="popup end-of-level-popup">
+          <h2>Level Complete!</h2>
+          <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart current level */}
+          <button className="btn" onClick={handleNextLevel}>Next Level</button> {/* Proceed to next level */}
+          <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Go to Main Menu */}
+        </div>
+      )}
     </div>
   );
 }
