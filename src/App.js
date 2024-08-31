@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import './App.css'; 
 import { levels as initialLevels } from './levels';
 import WelcomeScreen from './WelcomeScreen'; 
@@ -43,18 +43,19 @@ function App() {
   return (
     <div className="App">
       {showWelcome && <WelcomeScreen onPlay={startGame} onHowToPlay={showInstructions} />}
-      {currentLevel === null && !showWelcome && <LevelSelection onLevelSelect={handleLevelSelect} levels={levels} />}
+      {currentLevel === null && !showWelcome && <LevelSelection onLevelSelect={handleLevelSelect} onMainMenu={handleMainMenu} levels={levels} />}
       {showHowToPlay && <HowToPlay onClose={closeInstructions} />}
       {currentLevel !== null && !showWelcome && !showHowToPlay && (
         <Maze
           level={levels[currentLevel]}
+          currentLevelIndex={currentLevel} // Pass the current level index
           onLevelComplete={handleLevelComplete}
           onRestart={handleRestart}
-          onMainMenu={handleMainMenu}
+          onMainMenu={handleMainMenu} // Pass the handleMainMenu function
         />
       )}
     </div>
   );
 }
 
-export default App; 
+export default App;

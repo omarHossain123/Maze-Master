@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Import the global styles
+import './App.css'; 
 
-function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
+function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu }) {
   const [ballPosition, setBallPosition] = useState(level.start); // Track the current position of the ball
   const [trail, setTrail] = useState([]); // Track the trail left by the ball
   const [movingObstacles, setMovingObstacles] = useState(level.movingObstacles || []); // Track the positions of moving obstacles
@@ -10,11 +10,14 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
   const [showObstacleHitPopup, setShowObstacleHitPopup] = useState(false); // Control visibility of the obstacle hit pop-up
   const [showEndOfLevelUI, setShowEndOfLevelUI] = useState(false); // Control visibility of the end-of-level UI
 
-  // Reset the state when the level changes
+  // Reset the state when the level changes or when restarting the level
   useEffect(() => {
     setBallPosition(level.start); // Reset ball to the start position
     setTrail([]); // Clear the trail
+    setSpeed(1); // Reset speed to normal
     setMovingObstacles(level.movingObstacles || []); // Reset moving obstacles
+    setShowObstacleHitPopup(false); // Hide the obstacle hit pop-up
+    setShowEndOfLevelUI(false); // Hide the end-of-level UI
   }, [level]);
 
   /**
@@ -133,8 +136,8 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
     setBallPosition(level.start); // Reset ball to start position
     setTrail([]); // Clear the trail
     setSpeed(1); // Reset speed to normal
-    setShowEndOfLevelUI(false); // Hide end-of-level UI
     setShowObstacleHitPopup(false); // Hide obstacle hit pop-up
+    setShowEndOfLevelUI(false); // Hide end-of-level UI
   };
 
   /**
@@ -148,6 +151,10 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
 
   return (
     <div className="maze-container">
+      
+      {/* Level Indicator positioned above the grid */}
+      <h2 className="level-indicator">Level {currentLevelIndex + 1}</h2>
+
       {/* Grid container for the maze layout */}
       <div
         className="grid"
@@ -190,29 +197,33 @@ function Maze({ level, onLevelComplete, onRestart, onMainMenu }) {
         )}
       </div>
 
-      {/* Speed Boost Pop-up */}
+      {/* Main Menu and Restart Buttons positioned below the grid */}
+      <div className="maze-controls">
+        <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
+        <button className="btn control-btn" onClick={onRestart}>Restart</button>
+      </div>
+
+      {/* Popups remain unchanged... */}
       {showSpeedBoostPopup && (
         <div className="popup speed-boost-popup">
           Speed Boost Activated!
         </div>
       )}
 
-      {/* Obstacle Hit Pop-up */}
       {showObstacleHitPopup && (
         <div className="popup obstacle-hit-popup">
           <h2>Oops! You hit an obstacle.</h2>
-          <button className="btn" onClick={handleRestart}>Try Again</button>
-          <button className="btn" onClick={onMainMenu}>Main Menu</button>
+          <button className="btn control-btn" onClick={handleRestart}>Try Again</button>
+          <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
         </div>
       )}
 
-      {/* End-of-Level UI */}
       {showEndOfLevelUI && (
         <div className="popup end-of-level-popup">
           <h2>Great Job! You completed the level.</h2>
-          <button className="btn" onClick={handleRestart}>Restart</button>
-          <button className="btn" onClick={handleNextLevel}>Next Level</button>
-          <button className="btn" onClick={onMainMenu}>Main Menu</button>
+          <button className="btn control-btn" onClick={handleRestart}>Restart</button>
+          <button className="btn control-btn" onClick={handleNextLevel}>Next Level</button>
+          <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
         </div>
       )}
     </div>

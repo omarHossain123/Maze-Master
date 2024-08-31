@@ -1,10 +1,15 @@
 import React from 'react';
 import './App.css'; 
 
-function LevelSelection({ onLevelSelect, levels }) {
+function LevelSelection({ onLevelSelect, onMainMenu, levels }) {
   return (
     <div className="level-selection">
+      
+      {/* Main Menu Button positioned in the top left corner */}
+      <button className="btn control-btn main-menu-btn" onClick={onMainMenu}>Main Menu</button>
+
       <h1>Select a Level</h1>
+
       <div className="level-grid">
         {levels.map((level, index) => (
           <button

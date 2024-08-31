@@ -1,19 +1,45 @@
-/* Container for centering the maze on the page */
+/* Container for the entire maze screen */
 .maze-container {
-  display: flex; /* Aligns children horizontally */
-  align-items: center; /* Centers content vertically */
-  justify-content: center; /* Centers content horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically if needed */
   height: 100vh; /* Full viewport height */
 }
 
-/* Grid container for the maze layout */
-.grid {
-  display: grid; /* Creates a grid layout */
-  gap: 2px; /* Space between cells */
-  justify-content: center; /* Center grid horizontally */
-  align-items: center; /* Center grid vertically */
-  margin: auto; /* Ensure grid is centered */
+/* Center the level indicator above the grid */
+.level-indicator {
+  color: #3D52A0; /* Dark Blue for the level indicator */
+  font-size: 24px; /* Larger font size */
+  margin-bottom: 20px; /* Space below the indicator */
+  text-align: center; /* Center the indicator */
 }
+
+/* Adjust the grid container for proper alignment */
+.grid {
+  display: grid; /* Use CSS Grid layout */
+  margin-bottom: 20px; /* Space between the grid and buttons */
+}
+
+/* Center the maze controls below the grid */
+.maze-controls {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 20px; /* Space above the buttons */
+}
+
+/* Additional margin between control buttons */
+.maze-controls .btn {
+  margin: 0 10px; /* Margin between buttons */
+}
+
+/* Keep the main menu button in the top left corner in the level selection screen */
+.main-menu-btn {
+  position: absolute;
+  top: 20px; /* Margin from the top */
+  left: 20px; /* Margin from the left */
+}
+
 
 /* Style for each cell in the maze */
 .cell {
@@ -54,12 +80,14 @@ body {
   color: #333; /* Dark gray text for readability */
 }
 
+/* Center the level selection screen content after repositioning the main menu button */
 .level-selection {
   display: flex;
-  flex-direction: column; /* Stack the title and grid vertically */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  height: 100vh; /* Full viewport height */
+  position: relative; /* Required for absolute positioning of the main menu button */
 }
 
 .level-selection h1 {
@@ -247,5 +275,49 @@ body {
 /* Button hover effect */
 .popup .btn:hover {
   background-color: #8697C4; /* Softer blue on hover */
+}
+
+/* Styles for the control buttons (Main Menu, Restart, etc.) */
+.control-btn {
+  padding: 12px 24px; /* Comfortable padding for buttons */
+  margin: 8px; /* Space between buttons */
+  background-color: #3D52A0; /* Dark Blue for button background */
+  color: white; /* White text for contrast */
+  border: 2px solid #3D52A0; /* Dark Blue border */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  font-size: 18px; /* Readable button text size */
+  cursor: pointer; /* Pointer cursor for clickable elements */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth button interactions */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Hover effect for control buttons */
+.control-btn:hover {
+  background-color: #8697C4; /* Soft Blue on hover */
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+/* Updated styling for the pop-up buttons */
+.popup .control-btn {
+  margin-top: 10px; /* Space between buttons and content */
+  padding: 8px 16px; /* Button padding */
+  background-color: #3D52A0; /* Dark Blue for buttons */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s; /* Smooth transitions */
+}
+
+/* Additional styling for the hover effect */
+.popup .control-btn:hover {
+  background-color: #8697C4; /* Softer blue on hover */
+}
+
+/* Position the main menu button in the top left corner in the level selection screen */
+.main-menu-btn {
+  position: absolute;
+  top: 20px; /* Add some margin from the top */
+  left: 20px; /* Add some margin from the left */
 }
 
