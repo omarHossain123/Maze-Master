@@ -1,10 +1,15 @@
-/* Container for the entire maze screen */
+/* Add background image for the maze (grid playing) menu */
 .maze-container {
+  background-image: url('./assets/images/left-image.png'); /* Path to the background image */
+  background-size: cover; /* Ensure the image covers the entire area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  min-height: 100vh; /* Ensure it takes at least the full height of the viewport */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content horizontally */
-  justify-content: center; /* Center content vertically if needed */
-  height: 100vh; /* Full viewport height */
+  align-items: center;
+  justify-content: center;
+  color: white; /* Optional: Change text color to ensure visibility against the background */
 }
 
 /* Center the level indicator above the grid */
@@ -80,15 +85,20 @@ body {
   color: #333; /* Dark gray text for readability */
 }
 
-/* Center the level selection screen content after repositioning the main menu button */
+/* Add background image for the level selection menu */
 .level-selection {
-  display: flex;
+  background-image: url('./assets/images/right-image.png'); /* Path to the background image */
+  background-size: cover; /* Ensure the image covers the entire area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  height: 100vh; /* Make sure it takes the full height of the viewport */
+  display: flex; 
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Full viewport height */
-  position: relative; /* Required for absolute positioning of the main menu button */
+  color: white; /* Optional: Change text color to ensure visibility against the background */
 }
+
 
 .level-selection h1 {
   margin-bottom: 20px; /* Space between the title and the grid */
@@ -156,35 +166,66 @@ body {
   transform: scale(1.05); /* Slightly enlarge the button on hover */
 }
 
-/* Pop-up overlay style */
+/* Overlay style for the entire screen */
 .how-to-play-overlay {
-  position: fixed; /* Fixed positioning relative to the viewport */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-  display: flex; /* Flexbox for centering */
-  align-items: center; /* Center content vertically */
-  justify-content: center; /* Center content horizontally */
+  background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3; /* Ensures it's above the welcome screen */
 }
 
-/* Pop-up content box style */
+/* Enhances the visibility of the text in the HowToPlay popup */
 .how-to-play-popup {
-  background-color: #EDE8F5; /* Very Light Purple for readability */
-  padding: 20px; /* Padding inside the pop-up */
-  border-radius: 10px; /* Rounded corners for a soft look */
-  position: relative; /* Position relative to allow for close button positioning */
-  max-width: 80%; /* Limit pop-up width */
-  max-height: 80%; /* Limit pop-up height */
-  overflow-y: auto; /* Scroll if content overflows */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for emphasis */
+  background-image: url('./assets/images/level-selection-bg.png'); /* Right image as background */
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  color: #FFFFFF; /* White text for high contrast */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow for enhanced readability */
 }
 
-/* Title inside the pop-up */
+/* Enhances the heading's visibility and makes it pop */
 .how-to-play-popup h2 {
-  margin-top: 0; /* Remove default margin from top */
-  color: #3D52A0; /* Dark Blue for title emphasis */
+  color: #00A8FF; /* Bright blue color for the heading */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Stronger text shadow for the heading */
+}
+
+/* Styling for buttons and images */
+.how-to-play-popup button {
+  color: #FFFFFF; /* Button text color */
+  background-color: #00A8FF; /* Bright blue background */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Slight shadow for the button */
+}
+
+/* Adjusting image visibility in the pop-up */
+.how-to-play-popup img {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.7)); /* Drop shadow to make images pop */
+}
+
+/* Popup text styling */
+.how-to-play-popup p {
+  font-size: 18px; /* Increase font size for readability */
+  line-height: 1.5; /* Better line spacing */
+  margin-bottom: 10px;
 }
 
 /* Style for the close button inside the pop-up */
@@ -199,19 +240,47 @@ body {
   color: #3D52A0; /* Dark Blue for visibility */
 }
 
-/* Center the welcome screen */
+/* Updated CSS for WelcomeScreen component */
 .welcome-screen {
   display: flex;
   flex-direction: column; /* Stack content vertically */
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
-  height: 100vh; /* Full viewport height */
-  text-align: center; /* Center the text */
-  background-color: #8697C4; /* Soft Blue for a welcoming background */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-image: url('./assets/images/grid-playing-bg.png'); /* Set the left image as background */
+  background-size: cover; /* Scale image to cover the screen */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Ensure the image does not repeat */
+  background-color: #8697C4; /* Fallback color in case the image doesn't load */
+  color: #EDE8F5; /* Ensure text is readable */
+  padding: 20px;
 }
 
-.welcome-screen h1 {
-  color: #EDE8F5; /* Very Light Purple for the main title */
+/* Adjust welcome content styles for readability */
+.welcome-content {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background for contrast */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners for a softer look */
+  z-index: 1; /* Ensure content is above the background */
+}
+
+
+/* Style for buttons within welcome screen */
+.welcome-content .btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #3D52A0; /* Dark Blue for contrast */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.welcome-content .btn:hover {
+  background-color: #8697C4; /* Lighter blue on hover */
 }
 
 /* Power-up style */
@@ -347,5 +416,4 @@ body {
   padding: 15px 30px; /* Increase button size */
   font-size: 1.2rem; /* Increase font size for better readability */
 }
-
 
