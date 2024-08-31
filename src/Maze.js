@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
 function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu }) {
-  const [ballPosition, setBallPosition] = useState(level.start); // Initialize ball position to the level's start
+  const [ballPosition, setBallPosition] = useState(level.start); // Track the current position of the ball
   const [trail, setTrail] = useState([]); // Track the trail left by the ball
   const [movingObstacles, setMovingObstacles] = useState(level.movingObstacles || []); // Track the positions of moving obstacles
   const [speed, setSpeed] = useState(1); // Manage the speed of the ball
   const [showSpeedBoostPopup, setShowSpeedBoostPopup] = useState(false); // Control visibility of the speed boost pop-up
   const [showObstacleHitPopup, setShowObstacleHitPopup] = useState(false); // Control visibility of the obstacle hit pop-up
   const [showEndOfLevelUI, setShowEndOfLevelUI] = useState(false); // Control visibility of the end-of-level UI
+  const [isGameOver, setIsGameOver] = useState(false); // New state to manage whether the game is over (obstacle hit)
 
   // Reset the state when the level changes or when restarting the level
   useEffect(() => {
@@ -18,6 +19,7 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     setMovingObstacles(level.movingObstacles || []); // Reset moving obstacles
     setShowObstacleHitPopup(false); // Hide the obstacle hit pop-up
     setShowEndOfLevelUI(false); // Hide the end-of-level UI
+    setIsGameOver(false); // Reset the game over state
   }, [level]);
 
   /**
@@ -30,6 +32,7 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
 
     if (collisionWithObstacle) {
       setShowObstacleHitPopup(true); // Show "Obstacle hit" pop-up if a collision is detected
+      setIsGameOver(true); // Set the game over state to true
       return true;
     }
     return false;
@@ -74,8 +77,11 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
   /**
    * Function to handle key press events for moving the ball.
    * Implements boundary-aware movement and speed boost logic.
+   * Now includes a check to prevent movement if the game is over.
    */
   const handleKeyPress = (event) => {
+    if (isGameOver) return; // Prevent any movement if the game is over
+
     let newPosition = { ...ballPosition };
 
     // Determine the movement direction and apply speed boost logic
@@ -126,11 +132,12 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on component unmount
-  }, [handleKeyPress]);
+  }, [handleKeyPress, isGameOver]); // Re-run the effect when handleKeyPress or isGameOver changes
 
   /**
    * Function to handle level restart.
    * Resets the ball position, trail, and speed, and hides any active pop-ups.
+   * Also resets the isGameOver state to allow movement.
    */
   const handleRestart = () => {
     setBallPosition(level.start); // Reset ball to start position
@@ -138,15 +145,7 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     setSpeed(1); // Reset speed to normal
     setShowObstacleHitPopup(false); // Hide obstacle hit pop-up
     setShowEndOfLevelUI(false); // Hide end-of-level UI
-  };
-
-  /**
-   * Function to handle proceeding to the next level.
-   * Hides the end-of-level UI and triggers the parent function to move to the next level.
-   */
-  const handleNextLevel = () => {
-    setShowEndOfLevelUI(false); // Hide end-of-level UI
-    onLevelComplete(); // Trigger the parent function to move to the next level
+    setIsGameOver(false); // Reset game over state
   };
 
   return (
