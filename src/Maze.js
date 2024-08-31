@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
 function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu }) {
-  const [ballPosition, setBallPosition] = useState(level.start); // Track the current position of the ball
+  const [ballPosition, setBallPosition] = useState(level.start); // Initialize ball position to the level's start
   const [trail, setTrail] = useState([]); // Track the trail left by the ball
   const [movingObstacles, setMovingObstacles] = useState(level.movingObstacles || []); // Track the positions of moving obstacles
   const [speed, setSpeed] = useState(1); // Manage the speed of the ball
@@ -151,7 +151,6 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
 
   return (
     <div className="maze-container">
-      
       {/* Level Indicator positioned above the grid */}
       <h2 className="level-indicator">Level {currentLevelIndex + 1}</h2>
 
@@ -200,7 +199,7 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
       {/* Main Menu and Restart Buttons positioned below the grid */}
       <div className="maze-controls">
         <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
-        <button className="btn control-btn" onClick={onRestart}>Restart</button>
+        <button className="btn control-btn" onClick={handleRestart}>Restart</button> {/* Make sure this triggers handleRestart */}
       </div>
 
       {/* Popups remain unchanged... */}
@@ -222,7 +221,7 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
         <div className="popup end-of-level-popup">
           <h2>Great Job! You completed the level.</h2>
           <button className="btn control-btn" onClick={handleRestart}>Restart</button>
-          <button className="btn control-btn" onClick={handleNextLevel}>Next Level</button>
+          <button className="btn control-btn" onClick={onLevelComplete}>Next Level</button>
           <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
         </div>
       )}
