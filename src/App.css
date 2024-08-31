@@ -1,6 +1,6 @@
 /* Add background image for the maze (grid playing) menu */
 .maze-container {
-  background-image: url('./assets/images/left-image.png'); /* Path to the background image */
+  background-image: url('./assets/images/grid-playing-bg3.png'); /* Path to the background image */
   background-size: cover; /* Ensure the image covers the entire area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
@@ -87,7 +87,7 @@ body {
 
 /* Add background image for the level selection menu */
 .level-selection {
-  background-image: url('./assets/images/right-image.png'); /* Path to the background image */
+  background-image: url('./assets/images/level-selection-bg2.png'); /* Path to the background image */
   background-size: cover; /* Ensure the image covers the entire area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
@@ -182,7 +182,7 @@ body {
 
 /* Enhances the visibility of the text in the HowToPlay popup */
 .how-to-play-popup {
-  background-image: url('./assets/images/level-selection-bg.png'); /* Right image as background */
+  background-image: url('./assets/images/grid-playing-bg2.png'); /* Right image as background */
   background-size: cover;
   background-position: center;
   padding: 20px;
@@ -248,7 +248,7 @@ body {
   align-items: center;
   height: 100vh;
   text-align: center;
-  background-image: url('./assets/images/grid-playing-bg.png'); /* Set the left image as background */
+  background-image: url('./assets/images/grid-playing-bg2.png'); /* Set the left image as background */
   background-size: cover; /* Scale image to cover the screen */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Ensure the image does not repeat */
