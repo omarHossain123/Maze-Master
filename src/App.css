@@ -1,6 +1,6 @@
 /* Add background image for the maze (grid playing) menu */
 .maze-container {
-  background-image: url('./assets/images/grid-playing-bg.png'); /* Path to the background image */
+  background-image: url('./assets/images/GridBackground.jpg'); /* Path to the background image */
   background-size: cover; /* Ensure the image covers the entire area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
@@ -124,7 +124,7 @@ body {
 
 /* Add background image for the level selection menu */
 .level-selection {
-  background-image: url('./assets/images/level-selection-bg2.png'); /* Path to the background image */
+  background-image: url('./assets/images/LevelSelectionBackground.jpg'); /* Path to the background image */
   background-size: cover; /* Ensure the image covers the entire area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
@@ -229,7 +229,7 @@ body {
 
 /* Add this style to set the background image for the entire page */
 body {
-  background-image: url('./assets/images/grid-playing-bg2.png'); /* Path to the image in the public directory */
+  background-image: url('./assets/images/Welcom-Screen.png'); /* Path to the image in the public directory */
   background-size: cover; /* Ensures the image covers the entire background */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-attachment: fixed; /* Keeps the background fixed when scrolling */
@@ -305,7 +305,7 @@ body {
   align-items: center;
   height: 100vh;
   text-align: center;
-  background-image: url('./assets/images/grid-playing-bg2.png'); /* Set the left image as background */
+  background-image: url('./assets/images/Welcom-Screen.png'); /* Set the left image as background */
   background-size: cover; /* Scale image to cover the screen */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Ensure the image does not repeat */
@@ -479,4 +479,44 @@ body {
   display: none;
 }
 
+/* CSS for Sad Face Animation */
+.sad-face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Ensure it's on top of other elements */
+  width: 300px;
+  height: 300px;
+  margin-bottom: 20px;
+  animation: sad-face-animation 1s ease-in-out infinite alternate;
+}
 
+
+@keyframes sad-face-animation {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px); /* Slight bounce effect */
+  }
+}
+
+/* Level transition animation */
+.level-indicator {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  margin-bottom: 15px;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
+}
+
+.level-indicator.outgoing {
+  transform: translateY(-20px); /* Move up and fade out the old level */
+  opacity: 0;
+}
+
+.level-indicator.incoming {
+  transform: translateY(20px); /* Move down and fade in the new level */
+  opacity: 1;
+}

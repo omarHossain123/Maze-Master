@@ -9,7 +9,11 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
   const [showSpeedBoostPopup, setShowSpeedBoostPopup] = useState(false); // Control visibility of the speed boost pop-up
   const [showObstacleHitPopup, setShowObstacleHitPopup] = useState(false); // Control visibility of the obstacle hit pop-up
   const [showEndOfLevelUI, setShowEndOfLevelUI] = useState(false); // Control visibility of the end-of-level UI
-  const [isGameOver, setIsGameOver] = useState(false); // New state to manage whether the game is over (obstacle hit)
+  const [isGameOver, setIsGameOver] = useState(false); // State to manage whether the game is over (obstacle hit)
+
+  // New state for handling sad face animation and level transition animation
+  const [isSadFaceVisible, setIsSadFaceVisible] = useState(false); // Controls the sad face visibility
+  const [isLevelTransitioning, setIsLevelTransitioning] = useState(false); // Controls the level transition animation
 
   // Reset the state when the level changes or when restarting the level
   useEffect(() => {
@@ -20,6 +24,8 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     setShowObstacleHitPopup(false); // Hide the obstacle hit pop-up
     setShowEndOfLevelUI(false); // Hide the end-of-level UI
     setIsGameOver(false); // Reset the game over state
+    setIsSadFaceVisible(false); // Hide the sad face on level start
+    setIsLevelTransitioning(false); // Reset level transition animation state
   }, [level]);
 
   /**
@@ -33,6 +39,8 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     if (collisionWithObstacle) {
       setShowObstacleHitPopup(true); // Show "Obstacle hit" pop-up if a collision is detected
       setIsGameOver(true); // Set the game over state to true
+      setIsSadFaceVisible(true); // Show the sad face animation on collision
+      
       return true;
     }
     return false;
@@ -124,7 +132,8 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
 
     // Check if the player has reached the end position
     if (newPosition.x === level.end.x && newPosition.y === level.end.y) {
-      setShowEndOfLevelUI(true); // Show end-of-level UI
+      setIsLevelTransitioning(true); // Trigger level transition animation
+      setTimeout(() => setShowEndOfLevelUI(true), 500); // Show end-of-level UI after animation
     }
   };
 
@@ -146,12 +155,16 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     setShowObstacleHitPopup(false); // Hide obstacle hit pop-up
     setShowEndOfLevelUI(false); // Hide end-of-level UI
     setIsGameOver(false); // Reset game over state
+    setIsSadFaceVisible(false); // Hide sad face
+    setIsLevelTransitioning(false); // Reset level transition animation
   };
 
   return (
     <div className="maze-container">
-      {/* Level Indicator positioned above the grid */}
-      <h2 className="level-indicator">Level {currentLevelIndex + 1}</h2>
+      {/* Level Indicator positioned above the grid with transition effect */}
+      <h2 className={`level-indicator ${isLevelTransitioning ? 'outgoing' : ''}`}>
+        Level {currentLevelIndex + 1}
+      </h2>
 
       {/* Grid container for the maze layout */}
       <div
@@ -222,6 +235,14 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
           <button className="btn control-btn" onClick={handleRestart}>Restart</button>
           <button className="btn control-btn" onClick={onLevelComplete}>Next Level</button>
           <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
+        </div>
+      )}
+
+      {/* Sad Face animation when the player hits an obstacle */}
+      {isSadFaceVisible && (
+        <div className="sad-face">
+          {/* The sad face is represented by the class and animation defined in App.css */}
+          <div className="sad-face-emoji">😢</div> 
         </div>
       )}
     </div>
