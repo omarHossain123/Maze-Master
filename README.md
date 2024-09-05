@@ -38,4 +38,4 @@ How to Play:
 
 - Unlock new levels as you progress!
 
-  Can be found here: https://maze-master-phi.vercel.app/
+Can be found here: https://maze-master-phi.vercel.app/
