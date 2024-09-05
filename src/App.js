@@ -65,11 +65,11 @@ function App() {
       
       {showEndGamePopup && (
         <div className="end-game-popup">
-          <Confetti width={window.innerWidth} height={window.innerHeight} />
-          <h2>Congratulations, you have completed all levels!!</h2>
-          <button className="btn control-btn" onClick={handleMainMenu}>Main Menu</button>
-        </div>
-      )}
+          <Confetti width={window.innerWidth} height={window.innerHeight} /> {/* Confetti effect */}
+          <h2>Congratulations, you have completed all levels!!</h2> {/* Display the final message */}
+          <button className="btn control-btn" onClick={handleMainMenu}>Main Menu</button> {/* Button to return to the main menu */}
+      </div>
+    )}
     </div>
   );
 }

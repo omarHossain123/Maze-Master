@@ -366,25 +366,97 @@ body {
   bottom: 50px; /* Slightly higher to avoid overlap */
 }
 
-/* Specific popup for obstacle hit */
+
+/* Updated styling for the obstacle-hit-popup */
 .obstacle-hit-popup {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Center the pop-up */
-  background-color: #EDE8F5; /* Very Light Purple for the pop-up */
-  color: #3D52A0; /* Dark Blue text */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Shadow for emphasis */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-/* Specific popup for end-of-level UI */
-.end-of-level-popup {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Center the pop-up */
-  background-color: #EDE8F5; /* Very Light Purple for the pop-up */
-  color: #3D52A0; /* Dark Blue text */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Shadow for emphasis */
+.obstacle-hit-popup .popup-content {
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background for popup */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+  text-align: center;
 }
+
+.obstacle-hit-popup h2 {
+  color: white; /* White text */
+  font-size: 2rem; /* Larger font size */
+  margin-bottom: 20px; /* Spacing between message and buttons */
+}
+
+/* Style the buttons */
+.obstacle-hit-popup .btn {
+  background-color: #007bff; /* Bright blue color */
+  color: white; /* White text */
+  padding: 12px 24px;
+  font-size: 1.2rem; /* Large button text */
+  border: none;
+  border-radius: 8px;
+  margin: 10px; /* Space between buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Button shadow */
+}
+
+/* Add hover effect for buttons */
+.obstacle-hit-popup .btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Updated styling for the end-game popup */
+.end-game-popup {
+  position: fixed; /* Fix the position to cover the whole screen */
+  top: 0;
+  left: 0;
+  width: 100%; /* Cover the full width */
+  height: 100%; /* Cover the full height */
+  background-image: url('./assets/images/celebration-background.jpg'); /* Path to your background image */
+  background-size: cover; /* Ensure the background covers the entire area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent background repetition */
+  color: #3D52A0; /* Dark Blue text for contrast against the background */
+  display: flex; /* Flexbox to center content */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  flex-direction: column; /* Stack text and button vertically */
+  z-index: 1000; /* Ensure it's on top of all other elements */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Add shadow to make text stand out */
+}
+
+/* Update the text style for better readability against the background */
+.end-game-popup h2 {
+  font-size: 2.5rem; /* Larger font size for the congratulatory message */
+  margin-bottom: 20px; /* Space between the message and the button */
+  color: #fff; /* White text for visibility */
+}
+
+/* Styling for the buttons inside the end-game popup */
+.end-game-popup .btn {
+  padding: 15px 30px; /* Increase button size */
+  font-size: 1.2rem; /* Increase font size for better readability */
+  background-color: #3D52A0; /* Dark Blue background for buttons */
+  color: white; /* White text for contrast */
+  border-radius: 8px; /* Rounded corners for buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.end-game-popup .btn:hover {
+  background-color: #8697C4; /* Lighter blue on hover */
+}
+
 
 /* Styling for buttons inside pop-ups */
 .popup .btn {

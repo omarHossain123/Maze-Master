@@ -272,10 +272,12 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
       )}
 
       {showObstacleHitPopup && (
-        <div className="popup obstacle-hit-popup">
-          <h2>Oops! You hit an obstacle.</h2>
-          <button className="btn control-btn" onClick={handleRestart}>Try Again</button>
-          <button className="btn control-btn" onClick={onMainMenu}>Main Menu</button>
+        <div className="obstacle-hit-popup">
+          <div className="popup-content">
+            <h2>Oops! You hit an obstacle.</h2> {/* Display message */}
+            <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart button */}
+            <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Main menu button */}
+          </div>
         </div>
       )}
 
