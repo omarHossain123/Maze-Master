@@ -15,6 +15,10 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
   const [isSadFaceVisible, setIsSadFaceVisible] = useState(false); // Controls the sad face visibility
   const [isLevelTransitioning, setIsLevelTransitioning] = useState(false); // Controls the level transition animation
 
+  // New state for touch events
+  const [touchStart, setTouchStart] = useState(null); // Track the starting point of a touch
+  const [touchEnd, setTouchEnd] = useState(null); // Track the end point of a touch
+
   // Reset the state when the level changes or when restarting the level
   useEffect(() => {
     setBallPosition(level.start); // Reset ball to the start position
@@ -137,11 +141,57 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
     }
   };
 
+  /**
+   * New function to handle touch start event.
+   * Stores the initial touch position.
+   */
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0]; // Get the first touch point
+    setTouchStart({ x: touch.clientX, y: touch.clientY }); // Set the starting point of the touch
+  };
+
+  /**
+   * New function to handle touch end event.
+   * Determines the swipe direction and moves the ball accordingly.
+   */
+  const handleTouchEnd = (event) => {
+    const touch = event.changedTouches[0]; // Get the touch end point
+    setTouchEnd({ x: touch.clientX, y: touch.clientY });
+
+    // Calculate the swipe direction
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+
+    // Determine if it's a horizontal or vertical swipe
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        handleKeyPress({ key: 'ArrowRight' }); // Swipe right
+      } else {
+        handleKeyPress({ key: 'ArrowLeft' }); // Swipe left
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        handleKeyPress({ key: 'ArrowDown' }); // Swipe down
+      } else {
+        handleKeyPress({ key: 'ArrowUp' }); // Swipe up
+      }
+    }
+  };
+
   // Effect to listen for key presses and attach the keydown event listener
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on component unmount
-  }, [handleKeyPress, isGameOver]); // Re-run the effect when handleKeyPress or isGameOver changes
+    window.addEventListener('keydown', handleKeyPress); // Listen for keyboard events
+    window.addEventListener('touchstart', handleTouchStart); // Listen for touchstart events (for mobile swipes)
+    window.addEventListener('touchend', handleTouchEnd); // Listen for touchend events (for mobile swipes)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress); // Cleanup keyboard listener
+      window.removeEventListener('touchstart', handleTouchStart); // Cleanup touchstart listener
+      window.removeEventListener('touchend', handleTouchEnd); // Cleanup touchend listener
+    };
+  }, [handleKeyPress, touchStart, isGameOver]); // Re-run the effect when handleKeyPress, touchStart, or isGameOver changes
 
   /**
    * Function to handle level restart.

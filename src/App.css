@@ -520,3 +520,75 @@ body {
   transform: translateY(20px); /* Move down and fade in the new level */
   opacity: 1;
 }
+
+
+
+
+/* Base styling for the grid */
+.grid {
+  display: grid;
+  grid-gap: 5px;
+  margin: 20px auto;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr); /* Fewer columns for smaller screens */
+  }
+
+  /* Adjust the size of the cells */
+  .cell {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Reduce button size for smaller screens */
+  .btn {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  /* Reduce size of the pop-up elements */
+  .popup {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  /* Adjust the end-game popup styling for mobile */
+  .end-game-popup {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+  }
+}
+
+/* Further adjustments for very small screens (e.g., phones) */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr); /* Use fewer columns on small screens */
+  }
+
+  .cell {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Even smaller buttons for phones */
+  .btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .popup {
+    font-size: 12px;
+  }
+}
+
+
+/* Make buttons more tappable on mobile */
+@media (max-width: 768px) {
+  button {
+    padding: 12px 24px; /* Increase button size for easier tapping */
+    font-size: 16px;
+  }
+}
