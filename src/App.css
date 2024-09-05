@@ -593,9 +593,6 @@ body {
   opacity: 1;
 }
 
-
-
-
 /* Base styling for the grid */
 .grid {
   display: grid;
@@ -702,8 +699,8 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Center the modal horizontally */
+  align-items: center; /* Center the modal vertically */
   z-index: 1000; /* Ensure it sits above all other content */
 }
 
@@ -715,32 +712,32 @@ body {
   width: 400px;
   max-width: 90%; /* Ensure modal is responsive */
   text-align: center;
+  display: flex; /* Use flex to align content inside */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center the content horizontally */
 }
 
 .modal h2 {
   margin-bottom: 15px;
+  text-align: center; /* Ensure the title is centered */
 }
 
 .modal textarea {
-  width: 100%;
+  width: 100%; /* Make sure the text area takes full width */
   height: 100px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
   margin-bottom: 10px;
+  display: block; /* Ensure it's treated like a block element */
+  box-sizing: border-box; /* Include padding and border in the element’s width and height */
 }
 
+/* Center the buttons inside the modal */
 .modal-buttons {
   display: flex;
   justify-content: space-between;
-}
-
-.send-btn {
-  background-color: #28a745; /* Green for send button */
-}
-
-.cancel-btn {
-  background-color: #dc3545; /* Red for cancel button */
+  width: 100%; /* Make the buttons take full width */
 }
 
 .send-btn, .cancel-btn {
@@ -749,6 +746,15 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 48%; /* Make buttons evenly distributed */
+}
+
+.send-btn {
+  background-color: #28a745; /* Green for send button */
+}
+
+.cancel-btn {
+  background-color: #dc3545; /* Red for cancel button */
 }
 
 .send-btn:hover, .cancel-btn:hover {
