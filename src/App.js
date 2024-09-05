@@ -70,7 +70,7 @@ function App() {
 
     // EmailJS service 
     emailjs
-      .send('service_sktyzkg', 'template_t5yngdc', templateParams, 'RInHbSGYfFbhM8V1B')
+      .send('service_sktyzkg', 'template_m6v3319', templateParams, 'RInHbSGYfFbhM8V1B')
       .then(
         (response) => {
           console.log('SUCCESS!', response.status, response.text);
