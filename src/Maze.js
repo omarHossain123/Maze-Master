@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Confetti from 'react-confetti'; 
 import './App.css'; 
 
 function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu }) {
@@ -33,21 +34,25 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
   }, [level]);
 
   /**
-   * Function to detect collision between the ball and any obstacles.
-   * Checks both static and moving obstacles.
+   * Function to detect collisions with obstacles.
+   * If a collision is detected, show the obstacle-hit popup and stop the game.
    */
   const detectCollision = (position) => {
     const collisionWithObstacle = (level.obstacles || []).some(obstacle => obstacle.x === position.x && obstacle.y === position.y) ||
                                   movingObstacles.some(obstacle => obstacle.x === position.x && obstacle.y === position.y);
 
     if (collisionWithObstacle) {
-      setShowObstacleHitPopup(true); // Show "Obstacle hit" pop-up if a collision is detected
-      setIsGameOver(true); // Set the game over state to true
-      setIsSadFaceVisible(true); // Show the sad face animation on collision
-      
+      setShowObstacleHitPopup(true); // Show obstacle-hit popup
+      setIsGameOver(true); // Set the game over state
       return true;
     }
     return false;
+  };
+
+  // Custom draw function for confetti to show sad face emojis instead of confetti shapes
+  const drawSadFaceConfetti = (ctx) => {
+    ctx.font = "50px Arial"; // Set the font for sad faces
+    ctx.fillText("😢", 0, 0); // Draw the sad face emoji at each confetti position
   };
 
   /**
@@ -199,15 +204,17 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
    * Also resets the isGameOver state to allow movement.
    */
   const handleRestart = () => {
-    setBallPosition(level.start); // Reset ball to start position
-    setTrail([]); // Clear the trail
-    setSpeed(1); // Reset speed to normal
-    setShowObstacleHitPopup(false); // Hide obstacle hit pop-up
-    setShowEndOfLevelUI(false); // Hide end-of-level UI
-    setIsGameOver(false); // Reset game over state
-    setIsSadFaceVisible(false); // Hide sad face
-    setIsLevelTransitioning(false); // Reset level transition animation
-  };
+  setBallPosition(level.start); 
+  setTrail([]); 
+  setSpeed(1); 
+  setShowObstacleHitPopup(false); 
+  setShowSpeedBoostPopup(false); 
+  setShowEndOfLevelUI(false); 
+  setIsGameOver(false);
+  setIsSadFaceVisible(false);
+  setMovingObstacles(level.movingObstacles || []);
+};
+
 
   return (
     <div className="maze-container">
@@ -271,16 +278,6 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
         </div>
       )}
 
-      {showObstacleHitPopup && (
-        <div className="obstacle-hit-popup">
-          <div className="popup-content">
-            <h2>Oops! You hit an obstacle.</h2> {/* Display message */}
-            <button className="btn" onClick={handleRestart}>Restart</button> {/* Restart button */}
-            <button className="btn" onClick={onMainMenu}>Main Menu</button> {/* Main menu button */}
-          </div>
-        </div>
-      )}
-
       {showEndOfLevelUI && (
         <div className="popup end-of-level-popup">
           <h2>Great Job! You completed the level.</h2>
@@ -290,13 +287,24 @@ function Maze({ level, currentLevelIndex, onLevelComplete, onRestart, onMainMenu
         </div>
       )}
 
-      {/* Sad Face animation when the player hits an obstacle */}
-      {isSadFaceVisible && (
-        <div className="sad-face">
-          {/* The sad face is represented by the class and animation defined in App.css */}
-          <div className="sad-face-emoji">😢</div> 
-        </div>
-      )}
+      {/* Show the obstacle-hit popup when the player hits an obstacle */}
+      {showObstacleHitPopup && (
+          <div className="obstacle-hit-popup">
+            <Confetti
+              width={window.innerWidth}
+              height={window.innerHeight}
+              numberOfPieces={200}
+              gravity={0.2}
+              drawShape={drawSadFaceConfetti} // Customized sad face confetti
+            />
+            <div className="popup-content">
+              <h2>Oops! You hit an obstacle.</h2>
+              {/* Make sure this triggers the handleRestart function */}
+              <button className="btn" onClick={handleRestart}>Restart</button>
+              <button className="btn" onClick={onMainMenu}>Main Menu</button>
+            </div>
+          </div>
+        )}
     </div>
   );
 }
