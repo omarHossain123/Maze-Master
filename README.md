@@ -1,30 +1,39 @@
-# Maze Master
+Maze Master 
 
-Welcome to **Maze Master**, a fun and challenging maze game built with React! Navigate your way through multiple levels, avoid obstacles, and reach the end to advance. Complete all levels to win the game and celebrate with confetti!
+Maze Master is an interactive, grid-based maze game built using React, where players navigate a ball through a maze filled with obstacles, power-ups, and moving elements. This project demonstrates state management, responsive design, and various game mechanics such as collision detection, level transitions, and animations.
 
+Features:
 
-## Features
-- 🟦 **Dynamic Maze Levels**: Multiple levels of increasing difficulty with different grid sizes and obstacles.
-- 🚀 **Power-ups**: Collect speed boosts to navigate through the maze faster.
-- ⚠️ **Moving Obstacles**: Avoid obstacles that move and block your path.
-- 🎉 **End-Game Celebration**: Complete all levels to see a congratulatory message with a confetti effect.
-- 🖥️ **Responsive Design**: The game adjusts to different screen sizes.
+- 10 Levels of Increasing Complexity: Each level introduces new challenges, including static and moving   obstacles.
 
-## Usage
-    Start the Game: From the welcome screen, click "Play" to start.
-    Navigate the Maze: Use the arrow keys to move the ball through the maze.
-    Avoid Obstacles: Stay clear of both static and moving obstacles.
-    Complete Levels: Reach the end point of each maze to progress to the next level.
-    Celebrate Your Victory: Complete all levels to see a full-screen pop-up with a confetti effect.
+- Responsive Design: Fully optimized for desktop and mobile devices.
 
-## Game Levels
-    Level 1: Introduction to the maze with a simple grid and minimal obstacles.
-    Level 2-10: Increasing difficulty with larger grids, more obstacles, and moving hazards.
+- Smooth Animations: Includes level transitions, confetti effects, and UI popups for events like speed boosts and collisions.
 
-## How to Play
-    Movement: Use the arrow keys on your keyboard to move the ball.
-    Goal: Reach the end point of the maze without hitting any obstacles.
-    Power-ups: Collect speed boosts to move faster for a limited time.
+- Power-Ups and Obstacles: Navigate through mazes while avoiding obstacles and collecting speed boosts to increase your speed.
 
+- Game Over & Restart: Detects collisions with obstacles and allows the player to restart the level or return to the main menu.
 
+- Touch & Keyboard Controls: Supports arrow keys for desktop and swipe gestures for mobile devices.
 
+- Interactive UI: Includes menus for level selection, how-to-play instructions, and popups for bug reports or suggestions.
+
+Tech Stack: 
+- React: For building the dynamic UI and game logic.
+
+- EmailJS: To handle in-game feedback like bug reports and suggestions.
+
+- Confetti: For celebratory effects after completing levels or sad face effects on obstacle collisions.
+
+- CSS: For styling the grid, UI components, and responsive layouts.
+
+How to Play: 
+- Use the arrow keys (or swipe on mobile) to move the ball through the maze.
+
+- Avoid static and moving obstacles.
+
+- Collect power-ups like speed boosts to gain temporary abilities.
+
+- Reach the end point of the maze to complete the level.
+
+- Unlock new levels as you progress!
